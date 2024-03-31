@@ -537,7 +537,8 @@ wire agtb1,altb1,aeqb1,agtb2,altb2,aeqb2,agtb3,altb3,aeqb3;
  comp1bit ins4(a[3],b[3],agtb3,altb3,aeqb3,agtb,altb,aeqb);
 
 endmodule
-
+```
+```
 // Design of 4-bit comparator using Dataflow modelling
 
 module comp4bit(a,b,agtb,altb,aeqb);

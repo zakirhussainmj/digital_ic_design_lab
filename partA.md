@@ -85,8 +85,7 @@ assign sum=a^b^cin;
 assign co=(a&b)|(a&cin)|(cin&b);
 
 endmodule
-```
-```
+
 module addsub4bit ( a ,b ,add0sub1, sumdiff ,carryborrow );
 
 output [3:0] sumdiff ;
@@ -181,8 +180,7 @@ module fulladder1bit(a, b, c_in,sum, c_out);
   and (c2,s1, c_in);
   or (c_out,c2, c1);
 endmodule
-```
-```
+
 module fulladder4bit(a, b,sum, c_out);
   //i/o port declaration
   input [3:0] a, b;
@@ -195,8 +193,7 @@ module fulladder4bit(a, b,sum, c_out);
   fulladder1bit fa2(a[2], b[2], c2, sum[2], c3);
   fulladder1bit fa3(a[3], b[3], c3, sum[3], c_out);
 endmodule
-```
-```
+
 module onedigit_bcd_adder( A, B, CIN, F, COUT);
   input [3:0] A, B;
   input CIN;
@@ -211,8 +208,7 @@ module onedigit_bcd_adder( A, B, CIN, F, COUT);
   assign S = {1'b0,COUT,COUT,1'b0};
   fulladder4bit add1(Z, S, 0,F,w3);
 endmodule
-```
-```
+
 // 9's complement_generator
 
 module complement_generator(B, M, x);
@@ -234,8 +230,7 @@ module complement_generator(B, M, x);
   and (w7,B[3],w1);
   or (x[3],w8,w7);
 endmodule
-```
-```
+
 // 1-digit bcd Adder-cum-subtractor
 
 module onedigit_bcd_add_sub(A, B, CIN, M, F, COUT);
@@ -247,8 +242,7 @@ module onedigit_bcd_add_sub(A, B, CIN, M, F, COUT);
   complement_generator comgen0(B,M,W);
   onedigit_bcd_adder add0(A, W, CIN, F, COUT);
 endmodule
-```
-```
+
 // 2-digit bcd Adder-cum-subtractor
 
 module twodigit_bcd_add_sub(A2,A1,B2,B1,CIN,M,F2,F1,COUT);
@@ -391,8 +385,7 @@ xorgate ins4(P[3],C[2], sum[3]);
     
 assign cout=C[3];
 endmodule
-```
-```
+
 // Generate carry signals
 module Generate (
     input [3:0] A,
@@ -403,8 +396,7 @@ module Generate (
 assign G = A & B;
 
 endmodule
-```
-```
+
 // Propagate carry signals
 module Propagate (
     input [3:0] A,
@@ -415,8 +407,7 @@ module Propagate (
 assign P = A ^ B;
 
 endmodule
-```
-```
+
 // Carry Look-Ahead Logic
 module CarryLookAhead (
     input [3:0] G,
@@ -431,8 +422,7 @@ assign C[2] = G[2] | (P[2] & (G[1] | (P[1] & (G[0] | (P[0] & Cin)))));
 assign C[3] = G[3] | (P[3] & (G[2] | (P[2] & (G[1] | (P[1] & (G[0] | (P[0] & Cin)))))));
 
 endmodule
-```
-```
+
 module xorgate(a,b,y);
   
   input a,b;
@@ -441,7 +431,7 @@ module xorgate(a,b,y);
   assign y=a^b;
   
 endmodule
-```
+
 ```
 // Design of 4-bit carry look ahead adder using Dataflow modelling
 
@@ -531,8 +521,7 @@ assign agtb=(a&(~b))|(a&gt)|(gt&(~b));
 assign altb=(~a&(b))|(b&lt)|(lt&(~a));
 assign aeqb=(~a&(~b)&eq)|((a)&(b)&eq);
 endmodule
-```
-```
+
 //Comparator 4-bit
 
 module comp4bit(a,b,agtb,altb,aeqb);
@@ -547,8 +536,7 @@ wire agtb1,altb1,aeqb1,agtb2,altb2,aeqb2,agtb3,altb3,aeqb3;
  comp1bit ins4(a[3],b[3],agtb3,altb3,aeqb3,agtb,altb,aeqb);
 
 endmodule
-```
-```
+
 // Design of 4-bit comparator using Dataflow modelling
 
 module comp4bit(a,b,agtb,altb,aeqb);

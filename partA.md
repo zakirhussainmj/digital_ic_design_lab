@@ -168,7 +168,7 @@ endmodule
 #### c) 2-digit BCD adder / subtractor.
 
 ```
-// Structural Modelling of 2-digit BCD adder/subtractor
+// Design of 2-digit BCD adder/subtractor using Structural Modelling 
 
 module fulladder1bit(a, b, c_in,sum, c_out);
   input a, b, c_in;
@@ -262,7 +262,7 @@ module twodigit_bcd_add_sub(A2,A1,B2,B1,CIN,M,F2,F1,COUT);
 endmodule
 ```
 ```
-// Dataflow modelling for 2-digit BCD adder / subtractor
+// Design of 2-digit BCD adder/subtractor using Dataflow modelling
 
 module twodigit_bcd_add_sub(A2,A1,B2,B1,CIN,M,F2,F1,COUT);
   input [3:0]A1,B1;
@@ -353,7 +353,7 @@ module tb;
 
 #### d) 4-bit carry look ahead adder
 ```
-// Design of 4-bit carry look ahead adder using Structural modelling
+// Design of 4-bit carry look-ahead adder using Structural modelling
 
 module cla_4bit(
     input [3:0] a,
@@ -433,7 +433,8 @@ module xorgate(a,b,y);
 endmodule
 
 ```
-// Design of 4-bit carry look ahead adder using Dataflow modelling
+```
+// Design of 4-bit carry look-ahead adder using Dataflow modelling
 
 module cla_4bit(a,b,cin,sum,cout);
 input[3:0] a,b;

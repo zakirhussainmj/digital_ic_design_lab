@@ -7,7 +7,7 @@
 #### a) 4-bit ripple carry adder.
 
 ```
-//Design of 4-bit ripple carry adder using 4, 1-bit Full adders (Structural modelling)
+//Design of 4-bit ripple carry adder using 4, 1-bit Full adders using Structural modelling
 
 module full_adder(a,b,cin,sum,co);
 input a,b,cin;
@@ -30,7 +30,7 @@ endmodule
 
 ```
 ```
-// Design of 4-bit ripple carry adder  (Dataflow modelling)
+// Design of 4-bit ripple carry adder using Dataflow modelling
 
 module rca_4bit (a,b,sum,cout);
 output [3:0]sum;
@@ -74,7 +74,7 @@ endmodule
 #### b) 4-bit Adder–cum-Subtractor.
 
 ```
-// Design of 4-bit Adder–cum-Subtractor using Structural Modelling
+// Design of 4-bit Adder–cum-Subtractor using Structural modelling
 
 module fa(a,b,cin,sum,co);
 
@@ -111,7 +111,7 @@ fa u3 (a[3],x[3],c3,sumdiff[3],carryborrow);
 endmodule
 ```
 ```
-// Design of 4-bit Adder–cum-Subtractor Dataflow Modelling
+// Design of 4-bit Adder–cum-Subtractor using Dataflow modelling
 
 module addsub4bit ( a ,b ,add0sub1, sumdiff ,carryborrow );
 
@@ -168,7 +168,7 @@ endmodule
 #### c) 2-digit BCD adder / subtractor.
 
 ```
-// Design of 2-digit BCD adder/subtractor using Structural Modelling 
+// Design of 2-digit BCD adder/subtractor using Structural modelling 
 
 module fulladder1bit(a, b, c_in,sum, c_out);
   input a, b, c_in;

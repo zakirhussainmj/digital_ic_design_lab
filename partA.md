@@ -743,18 +743,238 @@ module tb_encoder_8to3;
 endmodule
 ```
 #### d) 8-bit parity generator and checker
+```
+// Design of 8-bit parity generator and checker using behavioural modeling
 
-3. Write a Verilog HDL program in Hierarchical structural model for
-	a) 16:1 multiplexer realization using 4:1 multiplexer
-	b) 3:8 decoder realization through 2:4 decoder
-	c) 8-bit comparator using 4-bit comparators and additional logic
+module parity_generator_checker (
+  input [7:0] data_in,
+  input odd_parity_control,
+  input even_parity_control,
+  input odd_parity_check_control,
+  input even_parity_check_control,
+  output [8:0] data_out_with_parity_bit,
+  output parity_out,
+  output reg parity_error
+);
 
-4. Write a Verilog HDL program in behavioral model for D, T and JK flip flops, shift registers and counters.
+  reg parity_bit;
 
-5. Write a Verilog HDL program in structural and behavioral models for
-	a) 8-bit asynchronous up-down counter 
-	b) 8-bit synchronous up-down counter
+  assign parity_out = parity_bit;
+  
+  always @* begin  // Parity generator
+    if (odd_parity_control) begin
+      parity_bit = ~^data_in;
+    end else if (even_parity_control) begin
+      	  parity_bit = ^data_in;
+    end else if (odd_parity_check_control) 
+	begin
 
-6. Write a Verilog HDL program for 4-bit sequence detector through Moore state machines
+           if (~^{data_in,parity_bit})
+	       begin
+	        $display($time,"ns For ODD parity: Let's say from DUT the parity_bit is %b\n",parity_bit);
+	        parity_error = 1'b1;
+	       end
+           else
+               begin
+	         $display($time,"ns For ODD parity: Let's say from DUT the parity_bit is %b\n",parity_bit);
+	         parity_error = 1'b0;
+	       end
+        end	  
+	else if (even_parity_check_control) 
+	begin
+                 if (^{data_in,parity_bit})
+	           begin
+	             $display($time,"ns For EVEN parity: Let's say from DUT the parity_bit is %b\n",parity_bit);
+	             parity_error = 1'b1;
+                   end
+		else
+               	   begin
+	            $display($time,"ns For EVEN parity: Let's say from DUT the parity_bit is %b\n",parity_bit);
+	            parity_error = 1'b0;
+	           end
+        end
+	else 
+	begin
+        parity_error = 1'b0;
+	parity_bit=1'b0;
+        end
+    end
 
-7. Write a Verilog HDL program for 4-bit sequence detector through Mealy state machines
+  // Output data with parity bit
+  assign data_out_with_parity_bit = {data_in, parity_bit};
+
+endmodule
+```
+```
+// Testbench for 8-bit parity generator and checker
+
+module parity_generator_checker_tb;
+
+  reg [7:0] data_in;
+  reg odd_parity_control;
+  reg even_parity_control;
+  reg odd_parity_check_control;
+  reg even_parity_check_control;
+  wire [8:0] data_out_with_parity_bit;
+  wire parity_out;
+  wire parity_error;
+
+//reg parity_bit;
+  parity_generator_checker dut(data_in,odd_parity_control,even_parity_control,odd_parity_check_control,even_parity_check_control,data_out_with_parity_bit,parity_out,parity_error);
+  
+  initial 
+  
+  begin
+  
+  // Test for Parity generator 
+  
+  // Initialize odd_parity_check_control,even_parity_check_control to ZERO
+  
+  // Start test for even parity
+  
+  $display($time, "ns -------------Start of Even parity Generation--------------\n");
+  #2;
+  $display($time, "ns ==Let's give EVEN number of 1's in Data and see at the end bit which is parity==\n");
+  data_in=8'b1010_1010; odd_parity_control=1'b0; even_parity_control=1'b1;
+ 
+ // Wait for some time
+  #2;
+  
+  $display($time, "ns Data given is data_in=%b  ", data_in,
+  "even_parity_control is high %b and odd_parity_control is low %b ", even_parity_control,odd_parity_control,
+  "and the generated data_out_with_parity_bit is %b\n", data_out_with_parity_bit);
+			  
+ // Wait for some time
+  #2;
+$display($time, "ns ==Let's give ODD number of 1's in Data and see at the end bit which is parity==\n");
+ data_in=8'b0111_1010; odd_parity_control=1'b0; even_parity_control=1'b1;
+ 
+ // Wait for some time
+  #2;
+ $display($time,"ns Data given is data_in=%b  ", data_in,
+  "even_parity_control is high %b and odd_parity_control is low %b ", even_parity_control,odd_parity_control,
+  "and the generated data_out_with_parity_bit is %b\n", data_out_with_parity_bit);
+			  
+ // Wait for some time
+  #2;
+  $display($time,"ns -------------END of Even parity Generation--------------\n");
+  #2;
+  // Start test for odd parity
+  $display($time,"ns ------------Start of ODD parity Generation------------\n");
+  #2;
+$display($time, "ns ==Let's give EVEN number of 1's in Data and see at the end bit which is parity==\n");
+   data_in=8'b1010_1010; odd_parity_control=1'b1; even_parity_control=1'b0;
+ 
+ // Wait for some time
+  #2;
+  $display($time,"ns Data given is data_in=%b  ", data_in,
+  "even_parity_control is low %b and odd_parity_control is high %b ", even_parity_control,odd_parity_control,
+  "and the generated data_out_with_parity_bit is %b\n", data_out_with_parity_bit);
+			  
+ // Wait for some time
+  #2;
+$display($time, "ns ==Let's give ODD number of 1's in Data and see at the end bit which is Parity==\n");
+   data_in=8'b111_1010; odd_parity_control=1'b1; even_parity_control=1'b0;
+ 
+ // Wait for some time
+  #2;
+  $display($time,"ns Data given is data_in=%b  ", data_in,
+  "even_parity_control is low %b and odd_parity_control is high %b ", even_parity_control,odd_parity_control,
+  "and the generated data_out_with_parity_bit is %b\n", data_out_with_parity_bit);
+			  
+ // Wait for some time
+  #2;
+  $display($time,"ns ------------END of ODD parity Generation------------\n");
+  #2;
+  
+  $display($time,"ns ------------Start of Even Parity check------------\n");
+  
+  data_in=8'b0111_1010; dut.parity_bit=1'b0;odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b1; odd_parity_check_control=1'b0;
+ #2;
+  $display($time, "ns data_in=%b ",data_in,
+			"parity_bit=%b ", dut.parity_bit,
+			"odd_parity_control=%b ", odd_parity_control,
+			"even_parity_control=%b ", even_parity_control,
+			"even_parity_check_control=%b ",even_parity_check_control,
+			"odd_parity_check_control=%b ",odd_parity_check_control,
+			"parity_error=%b\n ",parity_error
+			
+			);
+    #2;
+data_in=8'b0111_1010; dut.parity_bit=1'b1;odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b1; odd_parity_check_control=1'b0;
+ #2;
+  $display($time, "ns data_in=%b ",data_in,
+			"parity_bit=%b ", dut.parity_bit,
+			"odd_parity_control=%b ", odd_parity_control,
+			"even_parity_control=%b ", even_parity_control,
+			"even_parity_check_control=%b ",even_parity_check_control,
+			"odd_parity_check_control=%b ",odd_parity_check_control,
+			"parity_error=%b\n ",parity_error
+			
+			);
+    #2;
+	$display($time, "ns -----------END of Even Parity check------------\n");
+  #2;
+  $display($time,"ns ----------Start of ODD Parity check-------------\n");
+  #2;
+   data_in=8'b0111_1010; dut.parity_bit=1'b1; odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b0; odd_parity_check_control=1'b1;
+  
+  #2;
+  $display($time, "ns data_in=%b ",data_in,
+			"parity_bit=%b ", dut.parity_bit,
+			"odd_parity_control=%b ", odd_parity_control,
+			"even_parity_control=%b ", even_parity_control,
+			"even_parity_check_control=%b ",even_parity_check_control,
+			"odd_parity_check_control=%b ",odd_parity_check_control,
+			"parity_error=%b\n",parity_error
+			
+			);
+#2;
+   data_in=8'b0111_1010; dut.parity_bit=1'b0; odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b0; odd_parity_check_control=1'b1;
+  
+  #2;
+  $display($time, "ns data_in=%b ",data_in,
+			"parity_bit=%b ", dut.parity_bit,
+			"odd_parity_control=%b ", odd_parity_control,
+			"even_parity_control=%b ", even_parity_control,
+			"even_parity_check_control=%b ",even_parity_check_control,
+			"odd_parity_check_control=%b ",odd_parity_check_control,
+			"parity_error=%b\n",parity_error
+			
+			);
+    #2;
+    
+	$display($time,"ns -----------END of ODD Parity check------------\n");
+  #2;
+  $display($time, "ns ==When no control signal is active,The default parity bit and error both are set to ZERO==\n");
+  #2;
+  data_in=8'b0111_1010; odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b0; odd_parity_check_control=1'b0;
+  #2;
+  $display($time,"ns data_in=%b  ",data_in,
+		   "odd_parity_control=%b  ", odd_parity_control,
+			"even_parity_control=%b  ", even_parity_control,
+			"even_parity_check_control=%b  ",even_parity_check_control,
+			"odd_parity_check_control=%b  ",odd_parity_check_control,
+			"data_out_with_parity_bit_0=%b   ", data_out_with_parity_bit,
+			"parity_out=%b  ",parity_out,
+			"parity_error=%b\n",parity_error
+			
+			);
+  
+  $display($time, "ns ------------All tests ends----------");
+  end
+endmodule
+```
+### 3. Write a Verilog HDL program in a Hierarchical structural model for
+#### a) 16:1 multiplexer realization using 4:1 multiplexer
+#### b) 3:8 decoder realization through 2:4 decoder
+#### c) 8-bit comparator using 4-bit comparators and additional logic
+
+### 4. Write a Verilog HDL program in behavioral model for D, T, and JK flip flops, shift registers, and counters.
+
+### 5. Write a Verilog HDL program in structural and behavioral models for
+#### a) 8-bit asynchronous up-down counter 
+#### b) 8-bit synchronous up-down counter
+
+### 6. Write a Verilog HDL program for a 4-bit sequence detector through Moore state machines
+### 7. Write a Verilog HDL program for 4-bit sequence detector through Mealy state machines

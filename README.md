@@ -1,6 +1,7 @@
 # DIGITAL INTEGRATED CIRCUITS DESIGN LAB PC459EC
 
 ## PART-A Experiments: Write the Code using Verilog and simulate the following:
+[Click here for PART-A Experiments List](https://github.com/zakirhussainmj/digital_ic_design_lab/blob/main/partA.md)
 ```
 1. Write structural and dataflow Verilog HDL models for
 a) 4-bit ripple carry adder.

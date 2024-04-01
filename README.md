@@ -40,3 +40,15 @@ a) 8 8-bit asynchronous up-down counter b) 8 8-bit synchronous up-down counter
 5. Implement the Layout of CMOS Inverter.
 6. Implement the Layout of CMOS NAND.
 ```
+## NOTE
+```
+1. A total of 10 experiments must be completed in the semester.
+2. A minimum of 5 experiments from Part A and 5 from Part B is compulsory.
+```
+## EDA-Electronic Design Automation tools
+```
+There are various EDA software for the same purpose. We will be using the following EDA software
+
+Part-A: Modelsim
+Part B: For experiments 1-4 LTSpice and For experiments 5 and 6 Microwind
+```

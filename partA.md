@@ -820,7 +820,8 @@ module parity_generator_checker_tb;
   wire parity_error;
 
 //reg parity_bit;
-parity_generator_checker dut(data_in,odd_parity_control,even_parity_control,odd_parity_check_control,even_parity_check_control,data_out_with_parity_bit,parity_out,parity_error);
+parity_generator_checker dut(data_in,odd_parity_control,even_parity_control,odd_parity_check_control,
+                             even_parity_check_control,data_out_with_parity_bit,parity_out,parity_error);
   
 initial 
 begin
@@ -889,7 +890,8 @@ $display($time,"ns ------------END of ODD parity Generation------------\n");
   
 $display($time,"ns ------------Start of Even Parity check------------\n");
   
-data_in=8'b0111_1010; dut.parity_bit=1'b0;odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b1; odd_parity_check_control=1'b0;
+data_in=8'b0111_1010; dut.parity_bit=1'b0;odd_parity_control=1'b0; even_parity_control=1'b0;
+even_parity_check_control=1'b1; odd_parity_check_control=1'b0;
 #2;
 $display($time, "ns data_in=%b ",data_in,
 			"parity_bit=%b ", dut.parity_bit,
@@ -901,7 +903,8 @@ $display($time, "ns data_in=%b ",data_in,
 			
 			);
 #2;
-data_in=8'b0111_1010; dut.parity_bit=1'b1;odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b1; odd_parity_check_control=1'b0;
+data_in=8'b0111_1010; dut.parity_bit=1'b1;odd_parity_control=1'b0; even_parity_control=1'b0;
+even_parity_check_control=1'b1; odd_parity_check_control=1'b0;
 #2;
 $display($time, "ns data_in=%b ",data_in,
 			"parity_bit=%b ", dut.parity_bit,
@@ -917,7 +920,8 @@ $display($time, "ns -----------END of Even Parity check------------\n");
 #2;
 $display($time,"ns ----------Start of ODD Parity check-------------\n");
 #2;
-data_in=8'b0111_1010; dut.parity_bit=1'b1; odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b0; odd_parity_check_control=1'b1;
+data_in=8'b0111_1010; dut.parity_bit=1'b1; odd_parity_control=1'b0; even_parity_control=1'b0;
+even_parity_check_control=1'b0; odd_parity_check_control=1'b1;
 #2;
 $display($time, "ns data_in=%b ",data_in,
 			"parity_bit=%b ", dut.parity_bit,
@@ -929,7 +933,8 @@ $display($time, "ns data_in=%b ",data_in,
 			
 			);
 #2;
-data_in=8'b0111_1010; dut.parity_bit=1'b0; odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b0; odd_parity_check_control=1'b1;
+data_in=8'b0111_1010; dut.parity_bit=1'b0; odd_parity_control=1'b0; even_parity_control=1'b0;
+even_parity_check_control=1'b0; odd_parity_check_control=1'b1;
   
 #2;
 $display($time, "ns data_in=%b ",data_in,
@@ -947,7 +952,8 @@ $display($time,"ns -----------END of ODD Parity check------------\n");
 #2;
 $display($time, "ns ==When no control signal is active,The default parity bit and error both are set to ZERO==\n");
 #2;
-data_in=8'b0111_1010; odd_parity_control=1'b0; even_parity_control=1'b0; even_parity_check_control=1'b0; odd_parity_check_control=1'b0;
+data_in=8'b0111_1010; odd_parity_control=1'b0; even_parity_control=1'b0;
+even_parity_check_control=1'b0; odd_parity_check_control=1'b0;
 #2;
 $display($time,"ns data_in=%b  ",data_in,
 		   "odd_parity_control=%b  ", odd_parity_control,

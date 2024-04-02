@@ -972,8 +972,213 @@ endmodule
 ```
 ### 3. Write a Verilog HDL program in a Hierarchical structural model for
 #### a) 16:1 multiplexer realization using 4:1 multiplexer
+```
+// MUX 4:1
+module mux4x1(input [3:0]i,
+              input [1:0]select,
+              output reg y);
+  
+  
+  always@*
+    case(select)
+      
+      2'b00: y=i[0];
+      2'b01: y=i[1];
+      2'b10: y=i[2];
+      2'b11: y=i[3];
+      
+    endcase
+endmodule
+
+// MUX 16:1 using MUX 4:1
+module mux16x1( input [15:0]I, input [3:0]select, output y);
+    
+  // level 1
+  mux4x1 dut1(i[3:0],select[1:0],y1);
+  mux4x1 dut2(i[7:4],select[1:0],y2);
+  mux4x1 dut3(i[11:8],select[1:0],y3);
+  mux4x1 dut4(i[15:12],select[1:0],y4);
+  
+  //level 2
+  
+  mux4x1 dut5({y4,y3,y2,y1},select[3:2],y);
+  
+endmodule
+```
+```
+// Testbench 
+module test_mux16x1;
+
+   // Inputs
+   reg [15:0] data_in;
+   reg [3:0] select;
+
+   // Outputs
+   wire out;
+
+   // Instantiate the DUT
+   mux16x1 dut (.i(data_in),.select(select),.y(out));
+
+   // Initialize inputs
+   initial begin
+      data_in = 16'b1010_1010_1010_1010;
+      select = 4'b0000;
+   end
+
+   // Stimulus
+   always #5 select = select + 1'b1;
+  
+  initial
+   #50 $finish;
+
+   // Display output
+ initial
+   $monitor($time, "data_in=%b select=%0d out = %b", data_in,select,out);
+
+endmodule
+```
 #### b) 3:8 decoder realization through 2:4 decoder
+```
+module decoder2x4_enable(input [1:0] sel, input enable, output reg [3:0] out);
+
+    always @(sel, enable) begin
+        if (enable) begin
+            case(sel)
+                2'b00: out = 4'b0001;
+                2'b01: out = 4'b0010;
+                2'b10: out = 4'b0100;
+                2'b11: out = 4'b1000;
+            endcase
+        end else begin
+            out = 4'b0000;
+        end
+    end
+
+endmodule
+
+module decoder3x8(input [2:0]sel, output [7:0]out);
+  
+  
+  decoder2x4_enable uut1(sel[1:0],~sel[2], out[3:0]);
+  decoder2x4_enable uut2(sel[1:0],sel[2], out[7:4]);
+  
+endmodule
+```
+```
+// Testbench
+module testbench();
+  
+   // Declare the inputs and outputs for the testbench
+    reg [2:0] sel;
+    wire [7:0] out;
+
+    // Instantiate the DUT (device under test)
+    decoder3x8 dut(.sel(sel), .out(out));
+
+   
+
+    // Initialize the inputs
+    initial begin
+        sel = 0;
+        #10;
+        sel = 1;
+        #10;
+        sel = 2;
+        #10;
+        sel = 3;
+        #10;
+        sel = 4;
+        #10;
+        sel = 5;
+        #10;
+        sel = 6;
+        #10;
+        sel = 7;
+        #10;
+        $finish;
+    end
+
+    // Monitor the outputs and print them to the console
+    always @(out) begin
+        $display("sel = %d, out = %b", sel, out);
+    end
+
+endmodule
+```
 #### c) 8-bit comparator using 4-bit comparators and additional logic
+```
+// 1-bit comparator
+// comparator 1-bit
+
+module comp1bit(a,b,gt,lt,eq,agtb,altb,aeqb);
+
+input a,b,gt,lt,eq;
+output agtb,altb,aeqb;
+
+assign agtb=(a&(~b))|(a&gt)|(gt&(~b));
+assign altb=(~a&(b))|(b&lt)|(lt&(~a));
+assign aeqb=(~a&(~b)&eq)|((a)&(b)&eq);
+
+endmodule
+
+// 4-bit comparator
+//Comparator 4-bit
+
+module comp4bit(a,b,gt,lt,eq,agtb,altb,aeqb);
+input [3:0]a,b;
+input gt,lt,eq;
+output agtb,altb,aeqb;
+
+
+ comp1bit ins1(a[0],b[0],gt,lt,eq,agtb1,altb1,aeqb1);
+ comp1bit ins2(a[1],b[1],agtb1,altb1,aeqb1,agtb2,altb2,aeqb2);
+ comp1bit ins3(a[2],b[2],agtb2,altb2,aeqb2,agtb3,altb3,aeqb3);
+ comp1bit ins4(a[3],b[3],agtb3,altb3,aeqb3,agtb,altb,aeqb);
+
+endmodule
+
+// 8-bit comparator
+
+module comp8bit(a,b,gt,lt,eq,agtb,altb,aeqb);
+  input [7:0]a,b;
+  input gt,lt,eq;
+  output agtb,altb,aeqb;
+
+   
+
+  comp4bit  dut1(a[3:0],b[3:0],gt,lt,eq,agtb1,altb1,aeqb1);
+  comp4bit dut2(a[7:4],b[7:4],agtb1,altb1,aeqb1,agtb,altb,aeqb);
+  
+endmodule
+
+// Testbench
+`timescale 1ns/1ns
+module tb;
+  
+  
+  reg [7:0]a,b;
+  reg gt,lt,eq;
+  wire agtb,altb,aeqb;
+  
+  integer i;
+  
+ comp8bit dut(a,b,gt,lt,eq,agtb,altb,aeqb);
+  
+  
+  initial begin
+    gt=0;lt=0;eq=1;
+    $monitor("a %0d and b %0d agtb=%b altb=%b aeqb=%b", a,b,agtb,altb, aeqb);
+    for(i=0; i<8; i=i+1) begin
+      a=$random; b=$random;
+      #10;
+      
+    end
+    a=5; b=5;
+    #10;
+    $finish;
+  end
+endmodule
+```
 
 ### 4. Write a Verilog HDL program in behavioral model for D, T, and JK flip flops, shift registers, and counters.
 

@@ -1471,30 +1471,12 @@ rst<=1;
 #1;
 @(posedge clk);
 #1;
-/*
-rst<=0;
-#1;
-@(posedge clk);
-#1;*/
 
 rst<=0;data_in<=1;
 #1;
 @(posedge clk);
 #1;
 
-
-data_in<=0;
-#1;
-@(posedge clk);
-#1;
-
-
-data_in<=1;
-#1;
-@(posedge clk);
-#1;
-
-
 data_in<=0;
 #1;
 @(posedge clk);
@@ -1505,12 +1487,20 @@ data_in<=1;
 @(posedge clk);
 #1;
 
-
 data_in<=0;
 #1;
 @(posedge clk);
 #1;
 
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
 
 data_in<=1;
 #1;
@@ -1584,30 +1574,12 @@ rst<=1;
 #1;
 @(posedge clk);
 #1;
-/*
-rst<=0;
-#1;
-@(posedge clk);
-#1;*/
 
 rst<=0;data_in<=1;
 #1;
 @(posedge clk);
 #1;
 
-
-data_in<=0;
-#1;
-@(posedge clk);
-#1;
-
-
-data_in<=1;
-#1;
-@(posedge clk);
-#1;
-
-
 data_in<=0;
 #1;
 @(posedge clk);
@@ -1618,12 +1590,20 @@ data_in<=1;
 @(posedge clk);
 #1;
 
-
 data_in<=0;
 #1;
 @(posedge clk);
 #1;
 
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
 
 data_in<=1;
 #1;
@@ -1764,8 +1744,7 @@ module tb;
   wire [3:0]count;
  
   counter_updown4bit dut(clk,rst,ud,count);
-  
-  
+   
   initial
     begin
       clk<=0;

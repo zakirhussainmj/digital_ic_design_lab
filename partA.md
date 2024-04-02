@@ -1006,7 +1006,7 @@ module mux16x1( input [15:0]I, input [3:0]select, output y);
 endmodule
 ```
 ```
-// Testbench 
+// Testbench for MUX 16:1 
 module test_mux16x1;
 
    // Inputs
@@ -1065,7 +1065,7 @@ module decoder3x8(input [2:0]sel, output [7:0]out);
 endmodule
 ```
 ```
-// Testbench
+// Testbench  for Decoder 3-to-8
 module testbench();
   
    // Declare the inputs and outputs for the testbench
@@ -1074,8 +1074,6 @@ module testbench();
 
     // Instantiate the DUT (device under test)
     decoder3x8 dut(.sel(sel), .out(out));
-
-   
 
     // Initialize the inputs
     initial begin
@@ -1107,8 +1105,7 @@ endmodule
 ```
 #### c) 8-bit comparator using 4-bit comparators and additional logic
 ```
-// 1-bit comparator
-// comparator 1-bit
+// Comparator 1-bit
 
 module comp1bit(a,b,gt,lt,eq,agtb,altb,aeqb);
 
@@ -1121,14 +1118,12 @@ assign aeqb=(~a&(~b)&eq)|((a)&(b)&eq);
 
 endmodule
 
-// 4-bit comparator
-//Comparator 4-bit
+// Comparator 4-bit
 
 module comp4bit(a,b,gt,lt,eq,agtb,altb,aeqb);
 input [3:0]a,b;
 input gt,lt,eq;
 output agtb,altb,aeqb;
-
 
  comp1bit ins1(a[0],b[0],gt,lt,eq,agtb1,altb1,aeqb1);
  comp1bit ins2(a[1],b[1],agtb1,altb1,aeqb1,agtb2,altb2,aeqb2);
@@ -1137,7 +1132,7 @@ output agtb,altb,aeqb;
 
 endmodule
 
-// 8-bit comparator
+// Comparator 8-bit
 
 module comp8bit(a,b,gt,lt,eq,agtb,altb,aeqb);
   input [7:0]a,b;
@@ -1150,11 +1145,11 @@ module comp8bit(a,b,gt,lt,eq,agtb,altb,aeqb);
   comp4bit dut2(a[7:4],b[7:4],agtb1,altb1,aeqb1,agtb,altb,aeqb);
   
 endmodule
-
-// Testbench
+```
+```
+// Testbench for Comparator 8-bit
 `timescale 1ns/1ns
 module tb;
-  
   
   reg [7:0]a,b;
   reg gt,lt,eq;
@@ -1163,7 +1158,6 @@ module tb;
   integer i;
   
  comp8bit dut(a,b,gt,lt,eq,agtb,altb,aeqb);
-  
   
   initial begin
     gt=0;lt=0;eq=1;

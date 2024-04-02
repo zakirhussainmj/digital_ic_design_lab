@@ -1680,7 +1680,8 @@ always #5 clk=~clk;
 
 initial
 begin
-$monitor($time,"clk=%b rst=%b reg_op=%b sr_input=%b sl_input=%b pl_input=%b sr_output=%b sl_output=%b q=%b",clk,rst,reg_op,sr_input,sl_input,pl_input,sr_output,sl_output,q);
+$monitor($time,"clk=%b rst=%b reg_op=%b sr_input=%b sl_input=%b pl_input=%b sr_output=%b sl_output=%b q=%b",
+clk,rst,reg_op,sr_input,sl_input,pl_input,sr_output,sl_output,q);
   
 #1;
 rst<=1;

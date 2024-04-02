@@ -1623,6 +1623,115 @@ $monitor("clk %b,rst %b,data_in %b,data_out %b",clk,rst,data_in,data_out);
 endmodule
 ```
 #### 4c) Universal shift register
+```
+// Universal Shift Register
+
+module usr(input clk,rst,
+           input [1:0]reg_op,
+		   input sr_input, sl_input,
+           input [3:0]pl_input,
+		   output sr_output, sl_output,
+		   output reg [3:0]q);
+		   
+		   
+		always@(posedge clk)
+		   
+		   begin
+			if(rst)
+			begin
+		    q<=4'b0000;
+			end
+			else
+			case(reg_op)
+			2'b00: q<=q;                    // No changes
+			2'b01: q<={sr_input,q[3:1]};    // Shift right
+			2'b10: q<={q[2:0], sl_input};   // Shift left
+			2'b11: q<=pl_input;             // Parallel load
+			endcase
+		  end
+		   
+		assign sr_output=q[0];     // right shift
+		assign sl_output=q[3];     // left shift
+		   
+endmodule
+```
+```
+// Testbench for Universal Shift Register
+
+`timescale 1ns/1ps
+module tb;
+
+reg clk,rst;
+reg [1:0]reg_op;
+reg sr_input, sl_input;
+reg [3:0]pl_input;
+wire sr_output, sl_output;
+wire [3:0]q;
+
+usr dut(clk,rst,reg_op,sr_input,sl_input,pl_input,sr_output,sl_output,q);
+
+initial 
+begin
+clk=0;
+rst=0;
+end
+
+always #5 clk=~clk;
+
+initial
+begin
+$monitor($time,"clk=%b rst=%b reg_op=%b sr_input=%b sl_input=%b pl_input=%b sr_output=%b sl_output=%b q=%b",clk,rst,reg_op,sr_input,sl_input,pl_input,sr_output,sl_output,q);
+  
+#1;
+rst<=1;
+@(posedge clk);
+#1;
+  
+rst<=0; reg_op<=2'b00;      // No change
+@(posedge clk);
+#1;
+  
+reg_op<=2'b01; sr_input<=1;  // Right shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b01; sr_input<=0;   // Right shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b01; sr_input<=0;   // Right shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b01; sr_input<=0;   // Right shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b10; sl_input<=0; // Left shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b10; sl_input<=1; // Left shift
+@(posedge clk);
+  
+#1;
+reg_op<=2'b10; sl_input<=1; // Left shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b10; sl_input<=1; // Left shift
+@(posedge clk);
+#1;
+  
+reg_op<=2'b11; pl_input<=4'b1110;  //Parallel load
+@(posedge clk);
+#1;
+  
+$finish;
+
+end
+endmodule
+```
 ### Counters
 #### 4a) Up Counter
 ```

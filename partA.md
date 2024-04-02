@@ -1174,7 +1174,623 @@ module tb;
 endmodule
 ```
 
-### 4. Write a Verilog HDL program in behavioral model for D, T, and JK flip flops, shift registers, and counters.
+## 4. Write a Verilog HDL program in behavioral model for D, T, and JK flip flops, shift registers, and counters.
+### Flip flops
+#### 4a) D Flip flop
+```
+module dff(clk,rst,d,q);
+  
+  input clk,rst,d;
+  output reg q;
+  
+  always@(posedge clk)
+    begin
+      if(rst)   // Active high reset
+        q<=0;
+      else
+        q<=d;      
+    end
+  
+endmodule
+```
+```
+`timescale 1ns/1ps
+module tb;
+  
+  reg clk,rst,d;
+  wire  q;
+  
+  dff dut(clk,rst,d,q);
+  
+  initial
+    begin
+      clk<=0;
+    end
+  
+  always #5 clk=~clk;
+  
+  initial
+    begin
+       
+       rst<=1; d<=1;
+       #1;
+       @(posedge clk);
+       #1;
+       
+       rst<=0; d<=0;
+       #1;
+       @(posedge clk);
+       #1; 
+       
+       d<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      d<=0;
+      #1;
+      @(posedge clk);
+      #1;
+      
+      #50;
+      $stop;
+    end
+  
+  initial 
+    $monitor("clk=%b rst=%b d=%b q=%b",clk,rst,d,q);
+   
+endmodule
+```
+#### 4b) T Flip flop
+```
+module tff(clk,rst,t,q);
+  
+  input clk,rst,t;
+  output reg q;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        q<=0;
+      else if(t)
+        q<=~q;
+      else
+        q<=q;
+    end  
+  
+endmodule
+```
+```
+module tb_tff;
+  
+   reg clk,rst,t;
+   wire q;
+  
+   tff dut(clk,rst,t,q);
+  
+  initial
+    begin
+      clk<=0;
+    end
+  
+  always #5 clk=~clk;
+  
+  initial
+    begin
+       
+       rst<=1; t<=1;
+       #1;
+       @(posedge clk);
+       #1;
+       
+       rst<=0; t<=0;
+       #1;
+       @(posedge clk);
+       #1; 
+       
+       t<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+       t<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+       t<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      t<=0;
+      #1;
+      @(posedge clk);
+      #1;
+      
+       t<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+       t<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      #50;
+      $stop;
+    end
+  
+  initial 
+    $monitor("clk=%b rst=%b t=%b q=%b",clk,rst,t,q);
+   
+endmodule
+```
+#### 4c) JK Flip flop
+```
+module jkff(j,k,clk,rst,q);
+  
+  input j,k,clk,rst;
+  output reg q;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        q<=0;
+      else
+        case({j,k})
+          2'b00: q<=q;
+          2'b01: q<=0;
+          2'b10: q<=1;
+          2'b11: q<=~q;
+        endcase
+    end
+endmodule
+```
+```
+module tb_tff;
+  
+  reg j,k,clk,rst;
+  wire q;
+  
+   jkff dut(j,k,clk,rst,q);
+  
+  initial
+    begin
+      clk<=0;
+    end
+  
+  always #5 clk=~clk;
+  
+  initial
+    begin
+       
+       rst<=1; j<=1; k<=0;
+       #1;
+       @(posedge clk);
+       #1;
+       
+       rst<=0; j<=1; k<=0;
+       #1;
+       @(posedge clk);
+       #1; 
+       
+      j<=1; k<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      j<=0; k<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+       j<=1; k<=0;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      j<=0; k<=1;
+      #1;
+      @(posedge clk);
+      #1;
+      
+      j<=1; k<=1;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      j<=1; k<=0;
+       #1;
+       @(posedge clk);
+       #1;
+      
+      #50;
+      $stop;
+    end
+  
+  initial 
+    $monitor("clk=%b rst=%b j=%b; k=%b;=%b q=%b",clk,rst,j,k,q);
+   
+endmodule
+```
+### Shift registers
+#### 4a) Left shift register
+```
+//design file
+
+module leftshift_4bit(clk,rst,data_in,data_out);
+  input clk,rst;
+  input data_in;
+  output data_out;
+  
+  reg [3:0]temp;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        temp<=4'b0000;
+      else
+        temp<={temp[2:0],data_in};
+    end
+  
+  assign data_out=temp[3];
+  
+endmodule
+```
+```
+//testbench file
+
+`timescale 1ns/1ps
+
+module tb;
+
+reg clk,rst;
+reg data_in;
+wire data_out;
+
+leftshift_4bit uut(clk,rst,data_in,data_out);
+
+initial
+begin
+clk<=0;
+end
+
+always #5 clk<=~clk;
+
+initial
+begin
+
+rst<=0;
+#1;
+@(posedge clk);
+#1;
+
+rst<=1;
+#1;
+@(posedge clk);
+#1;
+/*
+rst<=0;
+#1;
+@(posedge clk);
+#1;*/
+
+rst<=0;data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+end
+
+initial
+$monitor("clk %b,rst %b,data_in %b,data_out %b",clk,rst,data_in,data_out);
+
+endmodule
+```
+#### 4b) Right shift register
+```
+//design file
+
+module rightshift_4bit(clk,rst,data_in,data_out);
+  input clk,rst;
+  input data_in;
+  output data_out;
+  
+  reg [3:0]temp;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        temp<=4'b0000;
+      else
+        temp<={data_in,temp[3:1]};
+    end
+  
+  assign data_out=temp[0];
+  
+endmodule
+```
+```
+//testbench file
+
+`timescale 1ns/1ps
+
+module tb;
+
+reg clk,rst;
+reg data_in;
+wire data_out;
+
+rightshift_4bit uut(clk,rst,data_in,data_out);
+
+initial
+begin
+clk<=0;
+end
+
+always #5 clk<=~clk;
+
+initial
+begin
+
+rst<=0;
+#1;
+@(posedge clk);
+#1;
+
+rst<=1;
+#1;
+@(posedge clk);
+#1;
+/*
+rst<=0;
+#1;
+@(posedge clk);
+#1;*/
+
+rst<=0;data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+
+data_in<=1;
+#1;
+@(posedge clk);
+#1;
+
+data_in<=0;
+#1;
+@(posedge clk);
+#1;
+
+end
+
+initial
+$monitor("clk %b,rst %b,data_in %b,data_out %b",clk,rst,data_in,data_out);
+
+endmodule
+```
+#### 4c) Universal shift register
+### Counters
+#### 4a) Up Counter
+```
+module counter_up4bit(clk,rst,count);
+  
+  input clk,rst;
+  output reg [3:0]count;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        count<=0;
+      else
+        count<=count+1'b1;
+    end
+  
+  endmodule
+```
+```
+`timescale 1ns/1ps
+module tb_counter_up4bit;
+  
+  reg clk,rst;
+  wire [3:0]count;
+  
+  
+  counter_up4bit dut(clk,rst,count);
+  
+  initial begin
+    clk<=0; rst<=0;
+  end
+  
+  always #5 clk<=~clk;
+  
+  initial begin
+    @(posedge clk); rst<=1;
+    @(posedge clk); rst<=0;
+  end
+  
+  initial
+  #200 $stop;
+  
+  initial
+    $monitor("clk=%b rst=%b count=%0d", clk,rst,count);
+endmodule
+```
+#### 4b) Down Counter
+```
+module counter_down4bit(clk,rst,count);
+  
+  input clk,rst;
+  output reg [3:0]count;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        count<=0;
+      else
+        count<=count-1'b1;
+    end
+  
+  endmodule
+```
+```
+`timescale 1ns/1ps
+module tb_counter_up4bit;
+  
+  reg clk,rst;
+  wire [3:0]count;
+  
+  
+  counter_down4bit dut(clk,rst,count);
+  
+  initial begin
+    clk<=0; rst<=0;
+  end
+  
+  always #5 clk<=~clk;
+  
+  initial begin
+    @(posedge clk); rst<=1;
+    @(posedge clk); rst<=0;
+  end
+  
+  initial
+  #200 $stop;
+  
+  initial
+    $monitor("clk=%b rst=%b count=%0d", clk,rst,count);
+endmodule
+```
+#### 4c) Up-down counter
+```
+module counter_updown4bit(clk,rst,ud,count);
+  
+  input clk,rst;
+  input ud; // ud=1 for up count; ud=0 for down count
+  output reg [3:0]count;
+  
+  always@(posedge clk)
+    begin
+      if(rst)
+        count<=0;
+      else if(ud)
+        count<=count+1'b1;
+      else
+        count<=count-1'b1;
+      
+    end
+  
+  endmodule
+```
+```
+`timescale 1ns/1ps
+module tb;
+  
+  reg clk,rst;
+  reg ud; // ud=1 for up count; ud=0 for down count
+  wire [3:0]count;
+ 
+  counter_updown4bit dut(clk,rst,ud,count);
+  
+  
+  initial
+    begin
+      clk<=0;
+      rst<=0;
+    end
+  
+  always #5 clk<=~clk;
+  
+  initial
+    begin
+      $monitor("clk %b,rst %b,ud %b,count %0d",clk,rst,ud,count);
+      @(posedge clk); rst<=1;
+      @(posedge clk); rst<=0;
+      repeat(20)
+        begin
+          @(posedge clk); ud<=1;
+        end
+       repeat(20)
+        begin
+          @(posedge clk); ud<=0;
+        end
+      $stop;
+    end
+endmodule
+```
 
 ### 5. Write a Verilog HDL program in structural and behavioral models for
 #### a) 8-bit asynchronous up-down counter 

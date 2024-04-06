@@ -11,6 +11,9 @@
 <b>Step3: After clicking on New Schematic it will be seen as shown in Fig.3</b><br>
 ![image](https://github.com/zakirhussainmj/digital_ic_design_lab/assets/165588295/3077b3e0-ac38-4a1d-a0ff-79286994cbaf)
 <br>Fig. 3<br>
-<b>Step4: To pick the components such as NMOS, PMOS and wire etc... use from marked areas as shown in Fig.4</b><br>
+<b>Step4: To pick the components such as NMOS, PMOS and wire, etc... use from marked areas as shown in Fig.4</b><br>
 ![image](https://github.com/zakirhussainmj/digital_ic_design_lab/assets/165588295/78cfc18b-d235-4236-aa3f-56d3e33c0ae0)
 <br>Fig. 4<br>
+<b>Step5: To pick the components such as NMOS, PMOS and wire, etc... use from marked areas as shown in Fig.5</b><br>
+![image](https://github.com/zakirhussainmj/digital_ic_design_lab/assets/165588295/eea3bed2-115f-46ab-bb21-a734ce8ec116)
+<br>Fig. 5<br>
